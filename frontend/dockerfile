@@ -1,0 +1,25 @@
+## imagen node liviana
+FROM node:18-alpine
+
+# directorio de trabajo en el contenedor
+WORKDIR /app
+
+# copiamos el package para instalar dependencias primero
+COPY package.json ./
+
+# instalamos las dependencias
+RUN npm install
+
+# copiamos el resto de archivos
+COPY . .
+
+# variables de entornos
+ENV API_URI=http://back-container-new:5000/api/topics
+ENV HOST=0.0.0.0
+ENV PORT=3000
+
+# puerto a exponer
+EXPOSE 3000
+
+# comando para iniciar la app
+CMD ["node", "server.js"]

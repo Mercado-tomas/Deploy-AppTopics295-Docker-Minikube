@@ -1,0 +1,29 @@
+# node liviano
+FROM node:18-alpine
+
+# directorio de trabajo
+WORKDIR /app
+
+# copiamos los arhivos de dependencias
+COPY package.json tsconfig.json ./
+
+# instalamos las dependencias
+RUN npm install
+
+# copiamos el resto del codigo
+COPY . .
+
+# compilamos typescript
+RUN npm run build
+
+# variables de entorno
+ENV DATABASE_URI=mongodb://mongo:27017
+ENV DATABASE_NAME=TopicstoreDb
+ENV HOST=0.0.0.0
+ENV PORT=5000
+
+# puerto a exponer
+EXPOSE 5000
+
+# comando para levantar el back
+CMD ["npm", "start"]

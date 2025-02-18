@@ -1,0 +1,53 @@
+
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo
+    container_name: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d    
+    networks:
+      - redApp
+  
+  backend:
+    build:
+      context: ./backend
+    container_name: back-container
+    environment:
+      - DATABASE_URL=mongodb://root:root@mongo:27017
+      - DATABASE_NAME=TopicstoreDb
+      - BACKEND_HOST=0.0.0.0
+      - BACKEND_PORT=5000
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+    networks:
+      - redApp
+  
+  frontend:
+    build:
+      context: ./frontend
+    container_name: front-container
+    environment:
+      - API_URI=http://back-container:5000/api/topics
+      - HOST=0.0.0.0
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - redApp
+
+networks:
+  redApp:
+    driver: bridge
+
+
+

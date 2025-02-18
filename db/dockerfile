@@ -1,0 +1,26 @@
+
+## iniciamos de mongo
+FROM mongo:latest
+
+# copiamos el código a la imagen
+COPY mongo-init.js /docker-entrypoint-initdb.d/mongo-init.js
+
+# config inicial 
+ENV MONGO_INITDB_ROOT_USERNAME=root
+ENV MONGO_INITDB_ROOT_PASSWORD=root
+
+# puerto a exponer
+EXPOSE 27017
+
+CMD ["mongod"]
+
+
+
+
+
+
+
+
+
+
+
